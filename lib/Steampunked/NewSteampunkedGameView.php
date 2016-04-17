@@ -19,8 +19,7 @@ class NewSteampunkedGameView extends View {
         $this->setTitle("Choose a Game!");
     }
 
-    public function present()
-    {
+    public function present() {
         $new  = <<< _HTML_
         <form action="post/newsteampunkedgame.php" method="post">
             <h1>New Game</h1>
@@ -44,7 +43,7 @@ _HTML_;
         return $new;
     }
 
-    public function head(){
+    public function head() {
         $html = parent::head();
         $html.= <<<__HEAD__
             <link href="steampunked.css" type="text/css" rel="stylesheet" />
@@ -54,13 +53,13 @@ __HEAD__;
         return $html;
     }
 
-    public function getGames(){
+    public function getGames() {
         $result = "<form action=\"post/joingame.php\" method=\"post\">";
         $result.="<h1>Existing Games</h1>";
-        //$result.="<input type=\"submit\" name=\"enter\" value=\"Select Game\"><br>";
         $games = new Games($this->site);
         $players = new Users($this->site);
         $gameList = $games->getNewGames();
+
         foreach($gameList as $game){
             $game = new Game($game);
             $result.="<input type=\"radio\" name=\"game\" value=\"".$game->getId()."\"> Player1: ".$players->get($game->getPlayer1())->getName().", Size: ".$game->getSize().", Status: Waiting<br>";

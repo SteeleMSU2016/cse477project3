@@ -9,8 +9,7 @@
 namespace Steampunked;
 
 
-class JoinGameController
-{
+class JoinGameController {
     private $redirect; // Page we will redirect the user to.
 
     /**
@@ -36,8 +35,7 @@ class JoinGameController
 
             //redirect to waiting page
             $this->redirect = "$root/steampunked-game.php";
-        }
-        else{
+        } else {
             $this->redirect = "$root/new-steampunked.php";
         }
 

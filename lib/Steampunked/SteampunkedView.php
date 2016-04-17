@@ -19,35 +19,26 @@ class SteampunkedView extends View {
 
         $games = new Games($this->site);
         $game = $games->get($_SESSION['game']);
-        if($game->getState() == 0){
-            echo "0";
-            //$this->waiting();
-            //$this->setTitle("Please Wait for The Other Player");
-            return $this->waiting();
 
+        if($game->getState() == 0) {
+            return $this->waiting();
         }
 
-        if($game->getState() == 3){
-            if($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1){
+        if ($game->getState() == 3) {
+            if($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1) {
                 return $this->winning();
-            }
-
-            else if($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2){
+            } else if($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2) {
                 return $this->winning();
-            }
-
-            else{
+            } else {
                 return $this->losing();
             }
         }
 
-        if($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2){
-            //echo "1";
+        if($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2) {
             return $this->waiting();
         }
 
-        if($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1){
-            //echo "2";
+        if($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1) {
             return $this->waiting();
         }
     }
@@ -57,34 +48,24 @@ class SteampunkedView extends View {
         $games = new Games($this->site);
         $game = $games->get($_SESSION['game']);
         if($game->getState() == 0){
-            echo "0";
-            //$this->waiting();
-            //$this->setTitle("Please Wait for The Other Player");
             return $this->waiting();
-
         }
 
         if($game->getState() == 3){
-            if($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1){
+            if ($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1) {
                 return $this->winning();
-            }
-
-            else if($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2){
+            } else if ($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2) {
                 return $this->winning();
-            }
-
-            else{
+            } else {
                 return $this->losing();
             }
         }
 
-        if($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2){
-            //echo "1";
+        if($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2) {
             return $this->waiting();
         }
 
-        if($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1){
-            //echo "2";
+        if($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1) {
             return $this->waiting();
         }
 
@@ -98,8 +79,7 @@ class SteampunkedView extends View {
         $html .= '</form>';
 
         $userPushKey = $_SESSION['user']->getPushKey();
-        //$html .= "<input id=\"myPushKey\" type=\"hidden\" value=\"$userPushKey\">";
-        $html.='<div id="myPushKey" class="hidden">$userPushKey</div>';
+        $html.= '<div id="myPushKey" class="hidden">$userPushKey</div>';
         return $html;
     }
 
@@ -209,7 +189,6 @@ class SteampunkedView extends View {
         $userPushKey = $_SESSION['user']->getPushKey();
         $this->setTitle("Please Wait for The Other Player");
         $result = <<<__HTML__
-
 <p class="waiting"><br><img src="images/IntPumpLarge.gif" width="354" height="267" alt="Pump animation from pumpschool.com"></p>
         <div id="myPushKey" class="hidden">$userPushKey</div>
 __HTML__;

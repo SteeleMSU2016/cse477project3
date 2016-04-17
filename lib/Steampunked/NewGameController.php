@@ -9,8 +9,7 @@
 namespace Steampunked;
 
 
-class NewGameController
-{
+class NewGameController {
     private $redirect; // Page we will redirect the user to.
 
     /**
@@ -22,14 +21,12 @@ class NewGameController
     public function __construct(Site $site, array &$session, array $post) {
         $root = $site->getRoot();
         if(isset($post['newgame']) && isset($post['boardSize'])){
-            //create new GameSet
-            //create new Game
+            //create new Game and GameSet
             $games = new Games($site);
             $session['game'] = $games->addNewGame($session['user']->getId(), $post['boardSize'], 0, 1);
             //redirect to waiting page
             $this->redirect = "$root/steampunked-game.php";
-        }
-        else{
+        } else {
             $this->redirect = "$root/new-steampunked.php";
         }
 
