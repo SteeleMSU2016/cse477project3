@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <!-- password: 87654321 -->
+    <P2Test_User id="7" name="Dudess, The"
+                password="49506d29656ad62805497b221a6bedacc304ad6496997f17fb39431dd462cf48"
+                email="dudess@dude.com" pushKey="77" salt="Nohp6^v$m(`qm#$o" />
+    <!-- password: super477 -->
+    <P2Test_User id="8"  name="Owen, Charles"
+                password="14831e3f21b423a557a0aa99a391a57a2400ef0fdade328890c9048ad3a8ab6a"
+                email="cbowen@cse.msu.edu"  pushKey="88" salt="aeLWK6k`jzPpgZMi"  />
+    <!-- password: bart477 -->
+    <P2Test_User id="9"  name="Simpson, Bart"
+                password="a747a49bf74523c1760f649707bf3d2b4a858f088520fd98b35def1e6929ca26"
+                email="bart@bartman.com" pushKey="99" salt="7xNhdV-8P#$p)1c9"/>
+    <!-- password: marge477 -->
+    <P2Test_User id="10"  name="Simpson, Marge"
+                password="edfc83ceca3a49aef204cee0e51eeb1728f728c56b2ea9037017230cc39ae938"
+                email="marge@bartman.com" pushKey="1010" salt="!yhLrEo3d8vD_LNV"/>
+</dataset>

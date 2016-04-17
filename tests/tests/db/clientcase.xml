@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <P2Test_clientcase id="22" client="9" agent="8" number="16-9876"
+                      summary="case summary" status="O" />
+    <P2Test_clientcase id="23" client="10" agent="8" number="16-1234"
+                      summary="case summary" status="O" />
+    <P2Test_clientcase id="25" client="9" agent="8" number="15-0011"
+                      summary="case summary" status="C" />
+
+    <P2Test_user id="8" email="cbowen@cse.msu.edu" name="Owen, Charles"
+                password=""
+                pushKey="88" />
+    <P2Test_user id="9" email="bart@bartman.com" name="Simpson, Bart" password=""
+                pushKey="C" />
+    <P2Test_user id="10" email="marge@bartman.com" name="Simpson, Marge"
+                password="" pushkey="C" />
+
+
+</dataset>
