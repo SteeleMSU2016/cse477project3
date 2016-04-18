@@ -44,11 +44,18 @@ class SteampunkedView extends View {
     }
 
     public function present() {
-        $html = '<form method="post" action="steampunked-post.php">';
+        // Page submits to does-not-exist.php so we can tell if we ever cause a page refresh. This
+        // form should never submit
+        $html = '<form method="post" action="does-not-exist.php"><div id="errorMessage"></div>';
         $games = new Games($this->site);
         $game = $games->get($_SESSION['game']);
-        if($game->getState() == 0){
-            return $this->waiting();
+
+        $userPushKey = $_SESSION['user']->getPushKey();
+        $html .= "<div id=\"myPushKey\" class=\"hidden\">$userPushKey</div>";
+        if($game->getState() == 0) {
+            $html .= $this->waiting();
+            $html .= "</form>";
+            return $html;
         }
 
         if($game->getState() == 3){
@@ -62,11 +69,15 @@ class SteampunkedView extends View {
         }
 
         if($game->getPlayer1() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 2) {
-            return $this->waiting();
+            $html .= $this->waiting();
+            $html .= "</form>";
+            return $html;
         }
 
         if($game->getPlayer2() == $_SESSION['user']->getId() && $game->getPlayerTurn() == 1) {
-            return $this->waiting();
+            $html .= $this->waiting();
+            $html .= "</form>";
+            return $html;
         }
 
         $this->steampunked = $this->setupGame();
@@ -78,8 +89,6 @@ class SteampunkedView extends View {
         $html .= $this->getPlayerButtons();
         $html .= '</form>';
 
-        $userPushKey = $_SESSION['user']->getPushKey();
-        $html.= '<div id="myPushKey" class="hidden">$userPushKey</div>';
         return $html;
     }
 
@@ -104,7 +113,7 @@ class SteampunkedView extends View {
                 } else {
                     if ($this->steampunked->isPlaceable($i, $k) && $this->steampunked->isGameOver() === false) {
                         $steamDirection = $this->steampunked->getSteamDirection($i, $k);
-                        $boardHtml .= "<div class=\"cell\"><input type=\"submit\" class=\"$steamDirection\" name=\"insertAtCell\" value=\"$i, $k\"></div>";
+                        $boardHtml .= "<div class=\"cell\"><input type=\"submit\" class=\"$steamDirection insertAtCell\" name=\"insertAtCell\" value=\"$i, $k\"></div>";
                     } else {
                         $steamDirection = $this->steampunked->getSteamDirection($i, $k);
                         $boardHtml .= "<div class=\"cell $steamDirection\"></div>";
@@ -126,24 +135,26 @@ class SteampunkedView extends View {
     }
 
     public function getPlayerPieces() {
+        $this->steampunked = $_SESSION['steampunked'];
         $playerPieces = $this->steampunked->getCurrentPlayer()->getPlayerPieces();
 
-        $html = '';
+        $html = '<div id="playerPiecesWrapper">';
 
         for($i = 0; $i < 5; $i++) {
             $imgHtml = "<img src=\"images/". $playerPieces[$i]->getPieceImage() . "\">";
             $html .= "$imgHtml <input type=\"radio\" name=\"selectedButton\" value=\"$i\">";
         }
 
+        $html .= "</div>";
         return $html;
     }
 
     public function getPlayerButtons() {
         $html = '<br>';
-        $html .= '<input type="submit" name="rotate" value="Rotate">';
-        $html .= '<input type="submit" name="discard" value="Discard">';
-        $html .= '<input type="submit" name="openValve" value="Open Valve">';
-        $html .= '<input type="submit" name="giveUp" value="Give Up">';
+        $html .= '<input type="submit" id="rotate" name="rotate" value="Rotate">';
+        $html .= '<input type="submit" id="discard" name="discard" value="Discard">';
+        $html .= '<input type="submit" id="openValve" name="openValve" value="Open Valve">';
+        $html .= '<input type="submit" id="giveUp" name="giveUp" value="Give Up">';
 
         return $html;
 
@@ -185,22 +196,22 @@ class SteampunkedView extends View {
         return $steam;
     }
 
-    public function waiting(){
+    public function waiting() {
         $userPushKey = $_SESSION['user']->getPushKey();
         $this->setTitle("Please Wait for The Other Player");
         $result = <<<__HTML__
 <p class="waiting"><br><img src="images/IntPumpLarge.gif" width="354" height="267" alt="Pump animation from pumpschool.com"></p>
-        <div id="myPushKey" class="hidden">$userPushKey</div>
 __HTML__;
         return $result;
     }
 
-    public function winning(){
-        $this->setTitle("YOU WIN!");
-        return "<form><a href=\"".$this->site->getRoot() . '/new-steampunked.php'."\">Play another game.</form>";
+    public function winning() {
+        $this->setTitle("");
+        return "<form><p>You Win!</p><a href=\"".$this->site->getRoot() . '/new-steampunked.php'."\">Play another game.</form>";
     }
-    public function losing(){
-        $this->setTitle("YOU LOSE!");
-        return "<form><a href=\"".$this->site->getRoot() . '/new-steampunked.php'."\">Play another game.</form>";
+
+    public function losing() {
+        $this->setTitle("");
+        return "<form><p>You Lose!</p><a href=\"".$this->site->getRoot() . '/new-steampunked.php'."\">Play another game.</form>";
     }
 }

@@ -18,10 +18,18 @@ class SteampunkedController {
     private $player1;
     private $player2;
     private $boardSize;
-    private $page = 'steampunked-game.php';
+    private $html = 'steampunked-game.php';
 
     public function __construct($site, array &$session, $postData) {
         $this->steampunked = $session['steampunked'];
+
+        // The user recieved a refresh messsage
+        if (isset($postData['getView'])) {
+            $steampunkedView = new SteampunkedView($site);
+            $boardHtml = $steampunkedView->present();
+            $this->html = json_encode(array('message' => 'ok', 'html' => $boardHtml));
+            return;
+        }
 
         // The player has clicked on a grid to insert the selected piece at the grid
         $games = new Games($site);
@@ -37,9 +45,12 @@ class SteampunkedController {
                 $player = $games->getPlayerIdForGame($session['game'], $other);
                 $player1PushKey = $users->getPushKey($player);
 
-                new PushController($site, $player1PushKey);
-                $this->page = 'steampunked-game.php';
+                $steampunkedView = new SteampunkedView($site);
+                $boardHtml = $steampunkedView->present();
 
+                new PushController($site, $player1PushKey);
+                $this->html = json_encode(array('message' => 'ok', 'html' => $boardHtml));
+                return;
             }
         }
 
@@ -48,6 +59,10 @@ class SteampunkedController {
             if (isset($postData['selectedButton'])) {
                 $this->steampunked->getCurrentPlayer()->rotateGamePiece($postData['selectedButton']);
 
+                $steampunkedView = new SteampunkedView($site);
+                $viewHtml = $steampunkedView->getPlayerPieces();
+                $this->html = json_encode(array('message' => 'ok', 'html' => $viewHtml));
+                return;
             }
         }
 
@@ -59,7 +74,11 @@ class SteampunkedController {
                 $player1PushKey = $users->getPushKey($player);
 
                 new PushController($site, $player1PushKey);
-                $this->page = 'steampunked-game.php';
+
+                $steampunkedView = new SteampunkedView($site);
+                $viewHtml = $steampunkedView->present();
+                $this->html = json_encode(array('message' => 'ok', 'html' => $viewHtml));
+                return;
             }
         }
 
@@ -71,7 +90,11 @@ class SteampunkedController {
             $player1PushKey = $users->getPushKey($player);
 
             new PushController($site, $player1PushKey);
-            $this->page = 'steampunked-game.php';
+
+            $steampunkedView = new SteampunkedView($site);
+            $viewHtml = $steampunkedView->present();
+            $this->html = json_encode(array('message' => 'ok', 'html' => $viewHtml));
+            return;
         }
 
         // The current player surrenders
@@ -81,22 +104,29 @@ class SteampunkedController {
             $player1PushKey = $users->getPushKey($player);
 
             new PushController($site, $player1PushKey);
-            $this->page = 'steampunked-game.php';
 
+            $steampunkedView = new SteampunkedView($site);
+            $viewHtml = $steampunkedView->present();
+            $this->html = json_encode(array('message' => 'ok', 'html' => $viewHtml));
+            return;
         }
 
         // the has said they want to go the new game page
         if (isset($postData['newGamePage'])) {
-            $this->page = 'index.php';
+            $this->html = 'index.php';
         }
     }
 
     public function getPage() {
-        if ($this->steampunked->isGameOver() && $this->page != 'index.php') {
+        if ($this->steampunked->isGameOver() && $this->html != 'index.php') {
             return 'steampunked-game-over.php';
         } else {
-            return $this->page;
+            return $this->html;
         }
+    }
+
+    public function getHtml() {
+        return $this->html;
     }
 
     public function getSteampunked() {
@@ -104,7 +134,7 @@ class SteampunkedController {
     }
 
     public function resetGame() {
-        if ($this->page == 'index.php') {
+        if ($this->html == 'index.php') {
             return true;
         } else {
             return false;

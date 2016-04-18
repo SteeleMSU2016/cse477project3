@@ -15,6 +15,13 @@ $view = new Steampunked\SteampunkedView($site);
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="jslib/PushInit.js"></script>
+    <script src="jslib/Steampunked.js"></script>
+    <script>
+        $(document).ready(function() {
+            pushInit($('#myPushKey').html());
+            new Steampunked("form").installButtonListeners();
+        })
+    </script>
     <?php echo $view->head(); ?>
 
 </head>

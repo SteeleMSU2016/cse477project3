@@ -16,7 +16,32 @@
         try {
             var msg = JSON.parse(e.data);
             if (msg.cmd === "reload") {
-                location.reload();
+                //location.reload();
+                $.ajax({
+                    url: "steampunked-post.php",
+                    data: {
+                        getView: true
+                    },
+                    method: "POST",
+                    success: function(data) {
+                        try {
+                            var json = $.parseJSON(data);
+                        } catch(err) {
+                            throw "JSON parse error: " + json;
+                            return;
+                        }
+
+                        if (json.message == 'ok') {
+                            $('form').html(json.html);
+                            new Steampunked('form').installButtonListeners();
+                        } else {
+                            console.log('failed to discard piece');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('failed');
+                    }
+                });
             }
         } catch (e) {
         }
@@ -24,8 +49,3 @@
 
     console.log("pushInit");
 }
-
-$(document).ready(function() {
-    //alert($('#myPushKey').html());
-    pushInit($('#myPushKey').html());
-});
